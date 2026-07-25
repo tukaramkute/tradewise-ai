@@ -1,0 +1,2 @@
+import type { ReactNode } from 'react'
+export function AuthHeader({ eyebrow, title, description, children }: { eyebrow: string; title: string; description: string; children?: ReactNode }) { return <header className="mb-8"><span className="text-xs font-bold uppercase text-mint-400">{eyebrow}</span><h1 className="mt-2 font-display text-3xl font-bold sm:text-4xl">{title}</h1><p className="mt-2 text-sm leading-6 text-slate-400">{description}</p>{children}</header> }

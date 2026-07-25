@@ -1,0 +1,8 @@
+import { useRef } from 'react'
+
+export function OtpInput({ value, onChange, error }: { value: string; onChange: (value: string) => void; error?: string }) {
+  const refs = useRef<Array<HTMLInputElement | null>>([]); const digits = Array.from({ length: 6 }, (_, index) => value[index] ?? '')
+  const update = (index: number, input: string) => { const digit = input.replace(/\D/g, '').slice(-1); const next = [...digits]; next[index] = digit; onChange(next.join('')); if (digit && index < 5) refs.current[index + 1]?.focus() }
+  const paste = (text: string) => { const code = text.replace(/\D/g, '').slice(0, 6); if (code) { onChange(code); refs.current[Math.min(code.length, 5)]?.focus() } }
+  return <fieldset><legend className="mb-3 text-sm font-semibold text-slate-300">6-digit verification code</legend><div className="grid grid-cols-6 gap-2">{digits.map((digit, index) => <input key={index} ref={(node) => { refs.current[index] = node }} value={digit} inputMode="numeric" autoComplete={index === 0 ? 'one-time-code' : 'off'} maxLength={1} aria-label={`Digit ${index + 1}`} className={`field aspect-square p-0 text-center font-display text-xl font-bold ${error ? 'border-coral-400/70' : ''}`} onChange={(event) => update(index, event.target.value)} onKeyDown={(event) => { if (event.key === 'Backspace' && !digit && index > 0) refs.current[index - 1]?.focus(); if (event.key === 'ArrowLeft' && index > 0) refs.current[index - 1]?.focus(); if (event.key === 'ArrowRight' && index < 5) refs.current[index + 1]?.focus() }} onPaste={(event) => { event.preventDefault(); paste(event.clipboardData.getData('text')) }} />)}</div>{error && <p role="alert" className="mt-2 text-xs text-coral-400">{error}</p>}</fieldset>
+}

@@ -1,0 +1,54 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: tradewise-ai
+  profiles:
+    default: postgres
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+# Application specific configuration
+tradewise:
+  security:
+    # Placeholder values used from Phase 3 onwards (JWT). Override via env vars in production.
+    jwt:
+      secret: ${TRADEWISE_JWT_SECRET:change-me-in-production-this-is-a-very-long-dev-only-secret-key-0123456789}
+      access-token-expiration-ms: 900000        # 15 minutes
+      refresh-token-expiration-ms: 604800000     # 7 days
+      issuer: tradewise-ai
+  otp:
+    expiration-minutes: 10
+    length: 6
+  cors:
+    allowed-origins: ${TRADEWISE_CORS_ORIGINS:http://localhost:5173,http://127.0.0.1:5173}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+  api-docs:
+    path: /v3/api-docs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    root: INFO
+    com.tradewise: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"

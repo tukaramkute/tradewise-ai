@@ -1,0 +1,3 @@
+export const countries = ['United States', 'United Kingdom', 'India', 'Singapore', 'Canada', 'Australia', 'Germany', 'United Arab Emirates'] as const
+export const currencies = ['USD', 'EUR', 'GBP', 'INR', 'SGD', 'CAD', 'AUD', 'AED'] as const
+export const timeZones = ['UTC', 'America/New_York', 'America/Chicago', 'Europe/London', 'Europe/Berlin', 'Asia/Kolkata', 'Asia/Singapore', 'Asia/Dubai'] as const

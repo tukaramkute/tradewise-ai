@@ -1,0 +1,5 @@
+import { motion } from 'framer-motion'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { BrandMark } from '../components/ui/DataDisplay'
+export function SplashPage() { const navigate = useNavigate(); useEffect(() => { const timer = window.setTimeout(() => navigate('/', { replace: true }), 1800); return () => window.clearTimeout(timer) }, [navigate]); return <main className="grid min-h-screen place-items-center bg-ink-950"><motion.div initial={{ opacity: 0, scale: .94 }} animate={{ opacity: 1, scale: 1 }} className="text-center"><BrandMark /><div className="mx-auto mt-6 h-0.5 w-32 overflow-hidden bg-white/10"><motion.div className="h-full bg-mint-400" initial={{ x: '-100%' }} animate={{ x: '100%' }} transition={{ duration: 1.4, repeat: Infinity }} /></div><p className="mt-3 text-xs text-slate-500">Preparing your market workspace</p></motion.div></main> }

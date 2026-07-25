@@ -1,0 +1,17 @@
+import { CalendarDays, CheckCircle2, Edit3, Globe2, Mail, MapPin, Phone, Shield, UserRound, WalletCards } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Button } from '../../../components/ui/Button'
+import { Badge, Card } from '../../../components/ui/DataDisplay'
+import { Skeleton } from '../../../components/ui/Feedback'
+import { useDocumentTitle } from '../../../hooks/useDocumentTitle'
+import { useAuth } from '../../../hooks/useAuth'
+
+export function ProfilePage() {
+  useDocumentTitle('Profile'); const { user } = useAuth(); if (!user) return <ProfileSkeleton />
+  const details = [{ icon: UserRound, label: 'Username', value: `@${user.username}` }, { icon: Mail, label: 'Email', value: user.email }, { icon: Phone, label: 'Phone', value: user.phoneNumber }, { icon: MapPin, label: 'Country', value: user.country }, { icon: Globe2, label: 'Time zone', value: user.timeZone }, { icon: WalletCards, label: 'Preferred currency', value: user.preferredCurrency }, { icon: Shield, label: 'Role', value: user.roles.join(', ') }, { icon: CalendarDays, label: 'Member since', value: new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(user.createdDate)) }]
+  return <div className="space-y-6"><header className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><span className="text-xs font-bold uppercase text-mint-400">Identity & preferences</span><h1 className="mt-1 font-display text-3xl font-bold">Your profile</h1><p className="mt-1 text-sm text-slate-400">The identity attached to your trading workspace.</p></div><Link to="/app/settings"><Button icon={Edit3}>Edit profile</Button></Link></header>
+    <Card className="overflow-hidden p-0"><div className="h-24 border-b border-white/[.06] bg-[linear-gradient(120deg,rgba(69,224,173,.14),rgba(255,118,111,.06),transparent)]" /><div className="px-5 pb-6 sm:px-8"><div className="-mt-11 flex flex-col gap-4 sm:flex-row sm:items-end"><img src={user.profileImageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName)}&background=21c997&color=07100d&size=160`} alt={`${user.fullName} profile`} className="size-24 rounded-full border-4 border-ink-900 object-cover" /><div className="flex-1 pb-1"><div className="flex flex-wrap items-center gap-3"><h2 className="font-display text-2xl font-bold">{user.fullName}</h2><Badge tone={user.status === 'ACTIVE' ? 'success' : 'danger'}>{user.status}</Badge></div><p className="mt-1 text-sm text-slate-400">@{user.username}</p></div>{user.emailVerified && <span className="mb-1 inline-flex items-center gap-1 text-xs font-bold text-mint-400"><CheckCircle2 className="size-4" />Verified email</span>}</div></div></Card>
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{details.map(({ icon: Icon, label, value }) => <Card key={label} className="min-w-0"><Icon className="mb-5 size-4 text-mint-400" /><p className="text-xs uppercase text-slate-500">{label}</p><p className="mt-1 truncate text-sm font-bold" title={value}>{value || 'Not set'}</p></Card>)}</div>
+  </div>
+}
+function ProfileSkeleton() { return <div className="space-y-5"><Skeleton className="h-20" /><Skeleton className="h-60" /><div className="grid grid-cols-2 gap-3 lg:grid-cols-4">{Array.from({ length: 8 }, (_, index) => <Skeleton key={index} className="h-32" />)}</div></div> }
